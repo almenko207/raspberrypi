@@ -22,3 +22,10 @@ if (wiringPiSetup() < 0){
 }
 lcd_h = lcdInit(2, 16, 4, RS, EN, D0, D1, D2,
 D3, D0, D1, D2, D3);
+lcdPosition(lcd_h, 0,0);
+lcdPrintf(lcd_h,"Displej sa 16 ch");
+lcdPosition(lcd_h, 0,1);
+lcdPrintf(lcd_h, "u 2 reda");
+delay(2000);
+lcdClear(lcd_h);
+}
