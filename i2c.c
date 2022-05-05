@@ -16,14 +16,19 @@
 #define SEK 0x02
 #define MIN 0x03
 #define SAT 0x04
+#define DAN 0x05
+#define MESEC 0x07
+#define GOD 0x08
+    
+    
     unsigned char WriteBuf[2];
     unsigned char ReadBuf;
-    unsigned char g8563_Store[3];
+    unsigned char g8563_Store[6];
     
     
     
  // sec,min,sat
-    unsigned char init8563_Store[3]={0x00,0x59,0x08};
+    unsigned char init8563_Store[3]={0x00,0x59,0x08,};
     
     
     
@@ -42,6 +47,18 @@
 
            WriteBuf[0] = SAT;
            WriteBuf[1] = g8563_Store[2];
+           bcm2835_i2c_write(WriteBuf,2);
+        
+           WriteBuf[0] = DAN;
+           WriteBuf[1] = g8563_Store[3];
+           bcm2835_i2c_write(WriteBuf,2);
+        
+           WriteBuf[0] = MESEC;
+           WriteBuf[1] = g8563_Store[4];
+           bcm2835_i2c_write(WriteBuf,2);
+        
+           WriteBuf[0] = GOD;
+           WriteBuf[1] = g8563_Store[5];
            bcm2835_i2c_write(WriteBuf,2);
 }
 
@@ -76,11 +93,17 @@
  g8563_Store[0] = time[0] & 0x7f;
  g8563_Store[1] = time[1] & 0x7f;
  g8563_Store[2] = time[2] & 0x3f;
+ g8563_Store[3] = time[3] & 0x3f;
+ g8563_Store[4] = time[4] & 0x3f;
+ g8563_Store[5] = time[5] & 0x3f;
  
 
  g8563_Store[0] = changeHexToInt(g8563_Store[0]);
  g8563_Store[1] = changeHexToInt(g8563_Store[1]);
  g8563_Store[2] = changeHexToInt(g8563_Store[2]);
+ g8563_Store[3] = changeHexToInt(g8563_Store[2]);
+ g8563_Store[4] = changeHexToInt(g8563_Store[2]);
+ g8563_Store[5] = changeHexToInt(g8563_Store[2]);
 }
 
 
@@ -106,9 +129,9 @@ int main(int argc, char **argv)
  while(1)
  {
  P8563_Readtime();
- printf("Sati:%d Minuti:%d Sekunde:%d\n",
+ printf("Sati:%d Minuti:%d Sekunde:%d\n Dan:%d\n Mesec:%d\n Godina:%d\n ",
 g8563_Store[2], g8563_Store[1],
-g8563_Store[0]);
+g8563_Store[0],g8563_Store[3],g8563_Store[4],g8563_Store[5]);
  bcm2835_delay(5000);
  
 }
